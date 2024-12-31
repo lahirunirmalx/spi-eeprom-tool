@@ -116,6 +116,4 @@ This project is open source and available under the MIT License.
 
 ## Contributions
 Contributions are welcome! Please open an issue or submit a pull request for improvements or bug fixes.
-
  
-```
