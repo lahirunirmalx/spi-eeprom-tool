@@ -14,7 +14,7 @@ This ESP32 project demonstrates how to read the entire memory content of a flash
 - Jumper wires
 
 ## Pinout for ESP32
-```markdown
+``` 
 | ESP32 Pin | Flash Chip Pin | Description                  |
 |-----------|----------------|------------------------------|
 | GPIO 5    | CS             | Chip Select                  |
@@ -24,6 +24,49 @@ This ESP32 project demonstrates how to read the entire memory content of a flash
 | GND       | GND            | Ground                       |
 | 3.3V      | VCC            | Power Supply for Flash Chip  |
 ```
+
+I used   MX25L4005APC-12G is an 8-pin SPI NOR flash memory chip. 
+
+Here's the pinout mapping for the MX25L4005APC-12G 8-pin DIP package and its corresponding connections to the ESP32 based on the provided project:
+https://www.alldatasheet.com/datasheet-pdf/pdf/267916/MCNIX/MX25L4005APC-12G.html 
+
+### MX25L4005APC-12G Pinout and ESP32 Connections 
+``` 
+| Pin on MX25L4005APC-12G | Name      | Description                    | ESP32 Connection  |
+|--------------------------|--------- |--------------------------------|-------------------|
+| 1                        | CS#      | Chip Select (Active Low)       | GPIO 5            |
+| 2                        | DO (MISO)| Data Out (Master In Slave Out) | GPIO 19           |
+| 3                        | WP#      | Write Protect (Active Low)     | Connect to 3.3V   |
+| 4                        | GND      | Ground                         | GND               |
+| 5                        | DI (MOSI)| Data In (Master Out Slave In)  | GPIO 23           |
+| 6                        | CLK      | Serial Clock                   | GPIO 18           |
+| 7                        | HOLD#    | Hold (Active Low)              | Connect to 3.3V   |
+| 8                        | VCC      | Power Supply (2.7–3.6V)        | 3.3V              |
+``` 
+### Notes:
+1. **CS# (Chip Select)**: Active low signal used to enable the chip for SPI communication. Connect this to `GPIO 5` on the ESP32, as specified in the code.
+2. **DO (MISO)**: Data sent from the flash chip to the ESP32 during read operations. Connect to `GPIO 19` on the ESP32.
+3. **DI (MOSI)**: Data sent from the ESP32 to the flash chip during write operations. Connect to `GPIO 23` on the ESP32.
+4. **CLK (Serial Clock)**: Synchronizes the communication between the ESP32 and the flash chip. Connect to `GPIO 18` on the ESP32.
+5. **WP# (Write Protect)**: This pin disables writing when active (low). Tie it to 3.3V if write protection is not needed.
+6. **HOLD#**: Temporarily pauses SPI communication when active (low). Tie it to 3.3V if not used.
+7. **VCC**: Provide 3.3V power to the chip.
+8. **GND**: Connect to the ground of the ESP32.
+
+### Schematic Example
+```
+ESP32        MX25L4005APC-12G
+------       --------------
+GPIO 5  -->  CS#
+GPIO 18 -->  CLK
+GPIO 19 -->  DO (MISO)
+GPIO 23 -->  DI (MOSI)
+3.3V    -->  VCC, WP#, HOLD#
+GND     -->  GND
+```
+
+Ensure your flash chip operates at 3.3V to avoid damage, as the ESP32's GPIO pins are not 5V tolerant. Use level shifters if required for other configurations.
+
 ## Installation
 1. Clone this repository:
    ```bash
